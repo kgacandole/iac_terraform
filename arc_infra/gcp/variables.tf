@@ -7,5 +7,6 @@ variable "cidr_range" {}
 variable "pods_ip_range" {}
 variable "svc_ip_range" {}
 variable "svc_account_mail" {}
+variable "svc_account_nodes" {}
 variable "kube_cluster_node_count" {}
 variable "kube_cluster_machine_type" {}
