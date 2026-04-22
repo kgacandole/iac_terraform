@@ -7,3 +7,7 @@ variable "subnet_node_cidr" {}
 variable "subnet_api_cidr" {}
 variable "service_cidr" {}
 variable "dns_service_ip" {}
+variable "gh_app_id" {}
+variable "gh_app_installation_id" {}
+variable "github_owner" {}
+variable "cloud_provider" {}
