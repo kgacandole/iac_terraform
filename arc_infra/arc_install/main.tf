@@ -1,7 +1,7 @@
 resource "helm_release" "cert_manager" {
   name             = "${var.prefix}-cert-manager"
   repository       = "https://charts.jetstack.io"
-  chart            = "${var.prefix}-cert-manager"
+  chart            = "cert-manager"
   namespace        = "${var.prefix}-cert-manager"
   create_namespace = true
   version          = "v1.13.0"
@@ -19,7 +19,7 @@ resource "kubernetes_namespace_v1" "arc_namespace" {
   }
 }
 
-resource "kubernetes_secret" "github_app_secret" {
+resource "kubernetes_secret_v1" "github_app_secret" {
   metadata {
     name      = "${var.prefix}-secret"
     namespace = kubernetes_namespace_v1.arc_namespace.metadata[0].name
@@ -50,12 +50,12 @@ resource "helm_release" "arc_runners" {
   namespace  = kubernetes_namespace_v1.arc_namespace.metadata[0].name
   repository = "oci://ghcr.io/actions/actions-runner-controller-charts"
   chart      = "${var.prefix}-runner-${var.cloud_provider}-scale-set"
-  depends_on = [helm_release.arc_controller, kubernetes_secret.github_app_secret]
+  depends_on = [helm_release.arc_controller, kubernetes_secret_v1.github_app_secret]
 
   values = [
     yamlencode({
       githubConfigUrl    = "https://github.com/{var.github_owner}"
-      githubConfigSecret = kubernetes_secret.github_app_secret.metadata[0].name
+      githubConfigSecret = kubernetes_secret_v1.github_app_secret.metadata[0].name
       minRunners         = 3
       maxRunners         = 5
       runnerScaleSetLabels = [
