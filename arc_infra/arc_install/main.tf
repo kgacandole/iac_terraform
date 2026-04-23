@@ -35,8 +35,8 @@ resource "kubernetes_secret_v1" "github_app_secret" {
 }
 
 resource "helm_release" "arc_controller" {
-  name             = var.prefix
-  namespace        = "${var.prefix}-systems"
+  name             = "${var.prefix}-controller"
+  namespace        = "${var.prefix}-controller"
   create_namespace = true
   
   repository = "oci://ghcr.io/actions/actions-runner-controller-charts"
@@ -49,7 +49,7 @@ resource "helm_release" "arc_runners" {
   name       = "${var.prefix}-runner-${var.cloud_provider}"
   namespace  = kubernetes_namespace_v1.arc_namespace.metadata[0].name
   repository = "oci://ghcr.io/actions/actions-runner-controller-charts"
-  chart      = "runner-scale-set"
+  chart      = "gha-runner-scale-set"
   depends_on = [helm_release.arc_controller, kubernetes_secret_v1.github_app_secret]
 
   values = [
