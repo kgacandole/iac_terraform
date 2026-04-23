@@ -1,5 +1,11 @@
-provider "kubernetes" {}
+terraform {
+  required_providers {
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+    }
 
-provider "helm" {
-  kubernetes = {}
+    helm = {
+      source = "hashicorp/helm"
+    }
+  }
 }
