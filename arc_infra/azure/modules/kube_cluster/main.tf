@@ -4,6 +4,11 @@ resource "azurerm_user_assigned_identity" "arc_identity" {
   location                      = var.location
 }
 
+resource "time_sleep" "wait_30_seconds" {
+  depends_on = [azurerm_user_assigned_identity.arc_identity]
+  create_duration = "30s"
+}
+
 resource "azurerm_role_assignment" "arc_vnet_contributor" {
   scope                         = var.vnet_id
   role_definition_name          = "Network Contributor"
@@ -44,5 +49,5 @@ resource "azurerm_kubernetes_cluster" "arc_cluster" {
     dns_service_ip              = var.dns_service_ip
   }
 
-  depends_on = [ azurerm_role_assignment.arc_vnet_contributor ]
+  depends_on = [ time_sleep.wait_30_seconds, azurerm_role_assignment.arc_vnet_contributor ]
 }
