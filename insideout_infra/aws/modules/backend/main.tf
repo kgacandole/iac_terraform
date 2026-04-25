@@ -46,7 +46,7 @@ resource "aws_lambda_function" "backend_api" {
   role             = aws_iam_role.lambda_role.arn
   filename         = "${path.module}/${var.package_build_path}"
   source_code_hash = filebase64sha256("${path.module}/${var.package_build_path}")
-  runtime          = "python3.14"
+  runtime          = var.lambda_py_version
   handler          = "lambda_handler"
 }
 
