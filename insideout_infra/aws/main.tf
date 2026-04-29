@@ -13,6 +13,11 @@ module "backend" {
     loaddb_lambda_handler       = var.loaddb_lambda_handler
 }
 
+resource "local_file" "website_endpoint" {
+  filename = "${path.module}/website_endpoint.txt"
+  content  = module.frontend.website_endpoint
+}
+
 resource "local_file" "api_endpoint" {
   filename = "${path.module}/backend_api_endpoint.txt"
   content  = module.backend.backend_api_endpoint
